@@ -36,17 +36,18 @@ PluginEditor::PluginEditor (PluginProcessor& p)
     outputGainLabel.setJustificationType(juce::Justification::centred);
     outputGainLabel.attachToComponent(&outputGainSlider, false);
 
-    // Create parameter attachments (this is what makes automation work!)
+    // Create parameter attachments using the public constants
     inputGainAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(
-        processorRef.getValueTreeState(), "inputGain", inputGainSlider);
+        processorRef.getValueTreeState(), PluginProcessor::INPUT_GAIN_ID, inputGainSlider);
     outputGainAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(
-        processorRef.getValueTreeState(), "outputGain", outputGainSlider);
+        processorRef.getValueTreeState(), PluginProcessor::OUTPUT_GAIN_ID, outputGainSlider);
 
     setSize (400, 300);
 }
 
 PluginEditor::~PluginEditor()
-= default;
+{
+}
 
 void PluginEditor::paint (juce::Graphics& g)
 {
@@ -62,11 +63,11 @@ void PluginEditor::resized()
     auto bounds = getLocalBounds();
     bounds.removeFromTop(40); // Space for title
 
-    // Inspector button in the bottom corner
+    // Inspector button in bottom corner
     inspectButton.setBounds(bounds.removeFromBottom(30).removeFromRight(120).reduced(5));
 
-    // Split the remaining area for the two knobs
-    auto knobArea = bounds.reduced (20);
+    // Split remaining area for the two knobs
+    auto knobArea = bounds.reduced(20);
     auto knobWidth = knobArea.getWidth() / 2;
 
     auto inputArea = knobArea.removeFromLeft(knobWidth).reduced(10);
