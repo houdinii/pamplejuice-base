@@ -67,7 +67,7 @@ void PluginEditor::resized()
 
     // Split the remaining area for the two knobs
     auto knobArea = bounds.reduced (20);
-    const auto knobWidth = knobArea.getWidth() / 2;
+    auto knobWidth = knobArea.getWidth() / 2;
 
     auto inputArea = knobArea.removeFromLeft(knobWidth).reduced(10);
     auto outputArea = knobArea.reduced(10);
