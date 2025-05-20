@@ -38,6 +38,23 @@ public:
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
 
+    // Adds parameter access
+    juce::AudioProcessorValueTreeState& getValueTreeState() { return valueTreeState; }
+
 private:
+    // Parameter layout creation
+    static juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
+
+    // Value tree state for parameter management
+    juce::AudioProcessorValueTreeState valueTreeState;
+
+    // Parameter IDs - using this ensures consistency
+    static constexpr const char* INPUT_GAIN_ID = "inputGain";
+    static constexpr const char* OUTPUT_GAIN_ID = "outputGain";
+
+    // Atomic parameters for thread-safe access in processBlock
+    std::atomic<float>* inputGainParam = nullptr;
+    std::atomic<float>* outputGainParam = nullptr;
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PluginProcessor)
 };
