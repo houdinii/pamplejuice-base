@@ -1,7 +1,7 @@
 #pragma once
 
 #include "PluginProcessor.h"
-#include "BinaryData.h"
+// #include "BinaryData.h"
 #include "melatonin_inspector/melatonin_inspector.h"
 
 //==============================================================================
@@ -16,10 +16,29 @@ public:
     void resized() override;
 
 private:
-    // This reference is provided as a quick way for your editor to
-    // access the processor object that created it.
     PluginProcessor& processorRef;
+
+    // UI Inspector
     std::unique_ptr<melatonin::Inspector> inspector;
     juce::TextButton inspectButton { "Inspect the UI" };
+
+    juce::ToggleButton gainEnabledButton;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> gainEnabledAttachment;
+
+    // Add a helper method for creating effect sections
+    static void createEffectSection(const juce::String& title,
+                             juce::Component& container,
+                             juce::ToggleButton& enableButton);
+
+    // Gain controls
+    juce::Slider inputGainSlider;
+    juce::Slider outputGainSlider;
+    juce::Label inputGainLabel;
+    juce::Label outputGainLabel;
+
+    // Parameter attachments for automation
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> inputGainAttachment;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> outputGainAttachment;
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PluginEditor)
 };
