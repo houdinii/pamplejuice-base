@@ -3,9 +3,10 @@
 DCBlockerSectionUI::DCBlockerSectionUI(juce::AudioProcessorValueTreeState& valueTreeState)
     : EffectSectionUI("DC Blocker", DCBlockerSection::DC_BLOCKER_ENABLED_ID, valueTreeState)
 {
+    // No virtual function calls here
 }
 
-void DCBlockerSectionUI::addControls()
+void DCBlockerSectionUI::initialize()
 {
     addAndMakeVisible(rSlider);
     rSlider.setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);

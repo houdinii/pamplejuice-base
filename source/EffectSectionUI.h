@@ -6,14 +6,16 @@
 class EffectSectionUI : public juce::Component
 {
 public:
-    EffectSectionUI(const juce::String& sectionName,
+    EffectSectionUI(const juce::String& name,
                     const juce::String& enableParamId,
-                    juce::AudioProcessorValueTreeState& valueTreeState);
+                    juce::AudioProcessorValueTreeState& vts);
     ~EffectSectionUI() override = default;
+
+    // Initialize should be called after construction
+    virtual void initialize() = 0;
 
     void paint(juce::Graphics& g) override;
     void resized() override;
-    virtual void addControls() = 0;
 
 protected:
     // Subclasses override this to add their specific controls

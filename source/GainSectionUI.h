@@ -9,8 +9,9 @@ public:
     GainSectionUI(juce::AudioProcessorValueTreeState& valueTreeState);
     ~GainSectionUI() override = default;
 
+    void initialize() override;
+
 protected:
-    void addControls() override;
     void layoutControls(juce::Rectangle<int> area) override;
 
 private:

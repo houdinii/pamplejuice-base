@@ -9,8 +9,9 @@ public:
     DCBlockerSectionUI(juce::AudioProcessorValueTreeState& valueTreeState);
     ~DCBlockerSectionUI() override = default;
 
+    void initialize() override;
+
 protected:
-    void addControls() override;
     void layoutControls(juce::Rectangle<int> area) override;
 
 private:

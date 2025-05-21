@@ -1,9 +1,9 @@
 #include "EffectSectionUI.h"
 
-EffectSectionUI::EffectSectionUI(const juce::String& sectionName,
+EffectSectionUI::EffectSectionUI(const juce::String& name,
                                  const juce::String& enableParamId,
-                                 juce::AudioProcessorValueTreeState& valueTreeState)
-    : sectionName(sectionName), valueTreeState(valueTreeState)
+                                 juce::AudioProcessorValueTreeState& vts)
+    : sectionName(name), valueTreeState(vts)
 {
     addAndMakeVisible(enableButton);
     enableButton.setButtonText("Enable " + sectionName);
@@ -11,7 +11,7 @@ EffectSectionUI::EffectSectionUI(const juce::String& sectionName,
     enableAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(
         valueTreeState, enableParamId, enableButton);
 
-    addControls();
+    // No virtual function calls in constructor
 }
 
 void EffectSectionUI::paint(juce::Graphics& g)

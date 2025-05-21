@@ -18,6 +18,10 @@ PluginEditor::PluginEditor (PluginProcessor& p)
     gainSectionUI = std::make_unique<GainSectionUI>(processorRef.getValueTreeState());
     dcBlockerSectionUI = std::make_unique<DCBlockerSectionUI>(processorRef.getValueTreeState());
 
+    // Initialize after construction
+    gainSectionUI->initialize();
+    dcBlockerSectionUI->initialize();
+
     addAndMakeVisible(*gainSectionUI);
     addAndMakeVisible(*dcBlockerSectionUI);
 

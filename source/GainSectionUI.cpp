@@ -3,9 +3,10 @@
 GainSectionUI::GainSectionUI(juce::AudioProcessorValueTreeState& valueTreeState)
     : EffectSectionUI("Gain Stage", GainSection::GAIN_ENABLED_ID, valueTreeState)
 {
+    // No addControls call here!
 }
 
-void GainSectionUI::addControls()
+void GainSectionUI::initialize()
 {
     // Input gain slider
     addAndMakeVisible(inputGainSlider);
