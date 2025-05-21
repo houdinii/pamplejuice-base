@@ -52,5 +52,9 @@ private:
     // Value tree state for parameter management
     juce::AudioProcessorValueTreeState valueTreeState;
 
+    // Smoothed parameters to prevent clicking
+    juce::SmoothedValue<float> smoothedInputGain;
+    juce::SmoothedValue<float> smoothedOutputGain;
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PluginProcessor)
 };
