@@ -1,11 +1,11 @@
 #pragma once
 
-#include "Meter/MeterSection.h"
-#include "GainSection/GainSection.h"
-#include "DCBlocker/DCBlockerSection.h"
-#include "SoftClipper/SoftClipperSection.h"
 #include "Compressor/CompressorSection.h"
+#include "DCBlocker/DCBlockerSection.h"
+#include "GainSection/GainSection.h"
 #include "LowPassFilter/LowPassFilterSection.h"
+#include "Meter/MeterSection.h"
+#include "SoftClipper/SoftClipperSection.h"
 #include "StereoWidener/StereoWidenerSection.h"
 
 #include <juce_audio_processors/juce_audio_processors.h>
@@ -40,7 +40,6 @@ public:
     EffectSection* getCompressorSection() const { return compressorSection.get(); }
     EffectSection* getSoftClipperSection() const { return softClipperSection.get(); }
 
-
     int getNumPrograms() override;
     int getCurrentProgram() override;
     void setCurrentProgram (int index) override;
@@ -49,6 +48,13 @@ public:
 
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
+
+    void savePresetToFile (const juce::File& presetFile);
+    void loadPresetFromFile (const juce::File& presetFile);
+
+    void copySettingsAToB();
+    void copySettingsBToA();
+    void swapAAndBSettings();
 
     // Add this for parameter access
     juce::AudioProcessorValueTreeState& getValueTreeState() { return valueTreeState; }
@@ -60,6 +66,7 @@ public:
 
 private:
     static juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
+    juce::UndoManager undoManager;
     juce::AudioProcessorValueTreeState valueTreeState;
 
     // Effect sections
@@ -70,6 +77,7 @@ private:
     std::unique_ptr<MeterSection> meterSection;
     std::unique_ptr<SoftClipperSection> softClipperSection;
     std::unique_ptr<CompressorSection> compressorSection;
+    std::unique_ptr<juce::XmlElement> settingsB;
 
     // Flag to track if we've initialized sections
     bool sectionsInitialized = false;

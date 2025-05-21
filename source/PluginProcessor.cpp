@@ -11,7 +11,7 @@ PluginProcessor::PluginProcessor()
                        .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
                      #endif
                        ),
-       valueTreeState(*this, nullptr, "PARAMETERS", createParameterLayout())
+       valueTreeState(*this, &undoManager, "PARAMETERS", createParameterLayout())
 {
     // Create sections AFTER the valueTreeState is constructed
     gainSection = std::make_unique<GainSection>();
@@ -213,6 +213,25 @@ void PluginProcessor::setStateInformation (const void* data, int sizeInBytes)
     if (xmlState != nullptr)
         if (xmlState->hasTagName (valueTreeState.state.getType()))
             valueTreeState.replaceState (juce::ValueTree::fromXml (*xmlState));
+}
+
+void PluginProcessor::savePresetToFile(const juce::File& presetFile)
+{
+    juce::MemoryBlock data;
+    getStateInformation(data);
+    presetFile.replaceWithData(data.getData(), data.getSize());
+}
+
+void PluginProcessor::loadPresetFromFile(const juce::File& presetFile)
+{
+    if (presetFile.existsAsFile())
+    {
+        juce::MemoryBlock data;
+        if (presetFile.loadFileAsData(data))
+        {
+            setStateInformation(data.getData(), static_cast<int>(data.getSize()));
+        }
+    }
 }
 
 //==============================================================================
