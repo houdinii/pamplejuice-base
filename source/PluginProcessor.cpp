@@ -16,12 +16,17 @@ PluginProcessor::PluginProcessor()
 }
 
 PluginProcessor::~PluginProcessor()
-{
-}
+= default;
 
 juce::AudioProcessorValueTreeState::ParameterLayout PluginProcessor::createParameterLayout()
 {
     std::vector<std::unique_ptr<juce::RangedAudioParameter>> parameters;
+
+    // Add an on/off switch for the gain stage
+    parameters.push_back(std::make_unique<juce::AudioParameterBool>(
+        juce::ParameterID(GAIN_ENABLED_ID, 1),
+        "Gain Stage",
+        true));  // default to enabled
 
     // Input gain: -24dB to +24dB, default 0dB (increased range for more pronounced effect)
     parameters.push_back(std::make_unique<juce::AudioParameterFloat>(
@@ -112,7 +117,7 @@ void PluginProcessor::changeProgramName (int index, const juce::String& newName)
 void PluginProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
     // Initialize smoothed parameters
-    // 50ms ramp time should eliminate clicking without being noticeable
+    // 50 ms ramp time should eliminate clicking without being noticeable
     smoothedInputGain.reset(sampleRate, 0.05);  // 50ms ramp
     smoothedOutputGain.reset(sampleRate, 0.05); // 50ms ramp
 
@@ -163,9 +168,17 @@ void PluginProcessor::processBlock (juce::AudioBuffer<float>& buffer,
     const float inputGainDb = *valueTreeState.getRawParameterValue(INPUT_GAIN_ID);
     const float outputGainDb = *valueTreeState.getRawParameterValue(OUTPUT_GAIN_ID);
 
+    // Check if the gain stage is enabled
+    bool gainEnabled = *valueTreeState.getRawParameterValue(GAIN_ENABLED_ID) > 0.5f;
+
     // Set target values for smooth parameters
-    smoothedInputGain.setTargetValue(juce::Decibels::decibelsToGain(inputGainDb));
-    smoothedOutputGain.setTargetValue(juce::Decibels::decibelsToGain(outputGainDb));
+    smoothedInputGain.setTargetValue(gainEnabled ?
+        juce::Decibels::decibelsToGain(inputGainDb) :
+        1.0f);  // 0dB when disabled
+
+    smoothedOutputGain.setTargetValue(gainEnabled ?
+        juce::Decibels::decibelsToGain(outputGainDb) :
+        1.0f);  // 0dB when disabled
 
     // Process each channel
     for (int channel = 0; channel < totalNumInputChannels; ++channel)
@@ -214,7 +227,7 @@ void PluginProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
     // Restore parameters from host
     std::unique_ptr<juce::XmlElement> xmlState (getXmlFromBinary (data, sizeInBytes));
-    if (xmlState.get() != nullptr)
+    if (xmlState != nullptr)
         if (xmlState->hasTagName (valueTreeState.state.getType()))
             valueTreeState.replaceState (juce::ValueTree::fromXml (*xmlState));
 }

@@ -3,7 +3,7 @@
 #include <juce_audio_processors/juce_audio_processors.h>
 
 #if (MSVC)
-#include "ipps.h"
+    #include "ipps.h"
 #endif
 
 class PluginProcessor : public juce::AudioProcessor
@@ -41,13 +41,14 @@ public:
     // Add this for parameter access
     juce::AudioProcessorValueTreeState& getValueTreeState() { return valueTreeState; }
 
-    // Parameter IDs - making these public so editor can access them
+    // Parameter IDs - making these public so the editor can access them
     static constexpr const char* INPUT_GAIN_ID = "inputGain";
     static constexpr const char* OUTPUT_GAIN_ID = "outputGain";
+    static constexpr const char* GAIN_ENABLED_ID = "gainEnabled";
 
 private:
     // Parameter layout creation
-    juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
+    static juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
 
     // Value tree state for parameter management
     juce::AudioProcessorValueTreeState valueTreeState;

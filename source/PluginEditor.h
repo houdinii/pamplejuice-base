@@ -1,7 +1,7 @@
 #pragma once
 
 #include "PluginProcessor.h"
-#include "BinaryData.h"
+// #include "BinaryData.h"
 #include "melatonin_inspector/melatonin_inspector.h"
 
 //==============================================================================
@@ -21,6 +21,14 @@ private:
     // UI Inspector
     std::unique_ptr<melatonin::Inspector> inspector;
     juce::TextButton inspectButton { "Inspect the UI" };
+
+    juce::ToggleButton gainEnabledButton;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> gainEnabledAttachment;
+
+    // Add a helper method for creating effect sections
+    void createEffectSection(const juce::String& title,
+                             juce::Component& container,
+                             juce::ToggleButton& enableButton);
 
     // Gain controls
     juce::Slider inputGainSlider;
