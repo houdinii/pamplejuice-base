@@ -25,7 +25,7 @@ PluginEditor::PluginEditor (PluginProcessor& p)
     addAndMakeVisible(*gainSectionUI);
     addAndMakeVisible(*dcBlockerSectionUI);
 
-    setSize(500, 600); // Taller to fit both sections
+    setSize(500, 800); // Taller to fit both sections
 }
 
 PluginEditor::~PluginEditor() = default;

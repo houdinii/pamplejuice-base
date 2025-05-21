@@ -151,8 +151,8 @@ void PluginProcessor::processBlock (juce::AudioBuffer<float>& buffer,
 
     // Process through each section in order if initialized
     if (sectionsInitialized) {
-        // gainSection->processBlock(buffer);
-        // dcBlockerSection->processBlock(buffer);
+        gainSection->processBlock(buffer);
+        dcBlockerSection->processBlock(buffer);
     }
 }
 

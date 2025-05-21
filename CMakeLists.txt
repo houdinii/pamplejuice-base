@@ -4,6 +4,12 @@ cmake_minimum_required(VERSION 3.25)
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 include (PamplejuceVersion)
 
+# CUSTOM VST INSTALL DIRECTORY
+# THIS IS NORMALLY COMMENTED OUT
+if (WIN32)
+    set(CMAKE_INSTALL_PREFIX "E:/Audio/vsts/VST3" CACHE PATH "…" FORCE)
+endif()
+
 # Modern concise way to add dependencies to your project
 include (CPM)
 
