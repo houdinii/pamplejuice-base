@@ -6,7 +6,7 @@
     #include "ipps.h"
 #endif
 
-class PluginProcessor : public juce::AudioProcessor
+class PluginProcessor final : public juce::AudioProcessor
 {
 public:
     PluginProcessor();

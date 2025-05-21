@@ -26,7 +26,7 @@ private:
     std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> gainEnabledAttachment;
 
     // Add a helper method for creating effect sections
-    void createEffectSection(const juce::String& title,
+    static void createEffectSection(const juce::String& title,
                              juce::Component& container,
                              juce::ToggleButton& enableButton);
 
