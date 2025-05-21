@@ -57,5 +57,8 @@ private:
     std::unique_ptr<GainSection> gainSection;
     std::unique_ptr<DCBlockerSection> dcBlockerSection;
 
+    // Flag to track if we've initialized sections
+    bool sectionsInitialized = false;
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PluginProcessor)
 };

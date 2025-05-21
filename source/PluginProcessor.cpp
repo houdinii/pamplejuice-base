@@ -11,13 +11,17 @@ PluginProcessor::PluginProcessor()
                        .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
                      #endif
                        ),
-       valueTreeState(*this, nullptr, "PARAMETERS", createParameterLayout()),
-       gainSection(std::make_unique<GainSection>()),
-       dcBlockerSection(std::make_unique<DCBlockerSection>())
+       valueTreeState(*this, nullptr, "PARAMETERS", createParameterLayout())
 {
-    // Set parameter pointers for all sections
+    // Create sections AFTER the valueTreeState is constructed
+    gainSection = std::make_unique<GainSection>();
+    dcBlockerSection = std::make_unique<DCBlockerSection>();
+
+    // Set parameter pointers
     gainSection->setParameterPointers(valueTreeState);
     dcBlockerSection->setParameterPointers(valueTreeState);
+
+    sectionsInitialized = true;
 }
 
 PluginProcessor::~PluginProcessor()
@@ -27,12 +31,16 @@ juce::AudioProcessorValueTreeState::ParameterLayout PluginProcessor::createParam
 {
     std::vector<std::unique_ptr<juce::RangedAudioParameter>> parameters;
 
-    // Let each section add its parameters
-    gainSection = std::make_unique<GainSection>();
-    dcBlockerSection = std::make_unique<DCBlockerSection>();
+    // Temporarily create sections just to get their parameters
+    // DO NOT store these instances!
+    {
+        auto tempGainSection = std::make_unique<GainSection>();
+        auto tempDcBlockerSection = std::make_unique<DCBlockerSection>();
 
-    gainSection->addParametersToLayout(parameters);
-    dcBlockerSection->addParametersToLayout(parameters);
+        tempGainSection->addParametersToLayout(parameters);
+        tempDcBlockerSection->addParametersToLayout(parameters);
+    }
+    // Temporary sections are destroyed here
 
     return { parameters.begin(), parameters.end() };
 }
@@ -104,8 +112,10 @@ void PluginProcessor::changeProgramName (int index, const juce::String& newName)
 //==============================================================================
 void PluginProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
-    gainSection->prepareToPlay(sampleRate, samplesPerBlock);
-    dcBlockerSection->prepareToPlay(sampleRate, samplesPerBlock);
+    if (sectionsInitialized) {
+        gainSection->prepareToPlay(sampleRate, samplesPerBlock);
+        dcBlockerSection->prepareToPlay(sampleRate, samplesPerBlock);
+    }
 }
 
 void PluginProcessor::releaseResources()
@@ -143,9 +153,11 @@ void PluginProcessor::processBlock (juce::AudioBuffer<float>& buffer,
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
 
-    // Process through each section in order
-    gainSection->processBlock(buffer);
-    dcBlockerSection->processBlock(buffer);
+    // Process through each section in order if initialized
+    if (sectionsInitialized) {
+        gainSection->processBlock(buffer);
+        dcBlockerSection->processBlock(buffer);
+    }
 }
 
 //==============================================================================
