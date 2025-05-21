@@ -1,17 +1,16 @@
 #pragma once
 
 #include "PluginProcessor.h"
-// #include "BinaryData.h"
 #include "melatonin_inspector/melatonin_inspector.h"
+#include "GainSectionUI.h"
+#include "DCBlockerSectionUI.h"
 
-//==============================================================================
 class PluginEditor : public juce::AudioProcessorEditor
 {
 public:
     explicit PluginEditor (PluginProcessor&);
     ~PluginEditor() override;
 
-    //==============================================================================
     void paint (juce::Graphics&) override;
     void resized() override;
 
@@ -22,23 +21,9 @@ private:
     std::unique_ptr<melatonin::Inspector> inspector;
     juce::TextButton inspectButton { "Inspect the UI" };
 
-    juce::ToggleButton gainEnabledButton;
-    std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> gainEnabledAttachment;
-
-    // Add a helper method for creating effect sections
-    static void createEffectSection(const juce::String& title,
-                             juce::Component& container,
-                             juce::ToggleButton& enableButton);
-
-    // Gain controls
-    juce::Slider inputGainSlider;
-    juce::Slider outputGainSlider;
-    juce::Label inputGainLabel;
-    juce::Label outputGainLabel;
-
-    // Parameter attachments for automation
-    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> inputGainAttachment;
-    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> outputGainAttachment;
+    // Effect section UIs
+    std::unique_ptr<GainSectionUI> gainSectionUI;
+    std::unique_ptr<DCBlockerSectionUI> dcBlockerSectionUI;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PluginEditor)
 };
