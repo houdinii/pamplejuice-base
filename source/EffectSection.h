@@ -15,16 +15,16 @@ public:
     virtual void processBlock(juce::AudioBuffer<float>& buffer) = 0;
 
     // Add parameters to the layout
-    virtual void addParametersToLayout(std::vector<std::unique_ptr<juce::RangedAudioParameter>>& parameters) = 0;
+    virtual void addParametersToLayout(juce::AudioProcessorValueTreeState::ParameterLayout& layout) = 0;
 
     // Set parameter pointers after ValueTreeState is created
     virtual void setParameterPointers(juce::AudioProcessorValueTreeState& valueTreeState) = 0;
 
     // Get the section name
-    virtual juce::String getSectionName() const = 0;
+    [[nodiscard]] virtual juce::String getSectionName() const = 0;
 
     // Get enable parameter ID
-    virtual juce::String getEnableParameterId() const = 0;
+    [[nodiscard]] virtual juce::String getEnableParameterId() const = 0;
 
 protected:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(EffectSection)

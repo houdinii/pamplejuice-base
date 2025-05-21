@@ -7,7 +7,7 @@ PluginProcessor::PluginProcessor()
                      #if ! JucePlugin_IsMidiEffect
                       #if ! JucePlugin_IsSynth
                        .withInput  ("Input",  juce::AudioChannelSet::stereo(), true)
-                      #endif
+                      #endif-
                        .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
                      #endif
                        ),
@@ -29,21 +29,17 @@ PluginProcessor::~PluginProcessor()
 
 juce::AudioProcessorValueTreeState::ParameterLayout PluginProcessor::createParameterLayout()
 {
-    std::vector<std::unique_ptr<juce::RangedAudioParameter>> parameters;
+    juce::AudioProcessorValueTreeState::ParameterLayout layout;
 
-    // Temporarily create sections just to get their parameters
-    // DO NOT store these instances!
-    {
-        auto tempGainSection = std::make_unique<GainSection>();
-        auto tempDcBlockerSection = std::make_unique<DCBlockerSection>();
+    GainSection tempGainSection;
+    DCBlockerSection tempDcBlockerSection;
 
-        tempGainSection->addParametersToLayout(parameters);
-        tempDcBlockerSection->addParametersToLayout(parameters);
-    }
-    // Temporary sections are destroyed here
+    tempGainSection.addParametersToLayout(layout);
+    tempDcBlockerSection.addParametersToLayout(layout);
 
-    return { parameters.begin(), parameters.end() };
+    return layout;
 }
+
 
 //==============================================================================
 const juce::String PluginProcessor::getName() const
@@ -155,8 +151,8 @@ void PluginProcessor::processBlock (juce::AudioBuffer<float>& buffer,
 
     // Process through each section in order if initialized
     if (sectionsInitialized) {
-        gainSection->processBlock(buffer);
-        dcBlockerSection->processBlock(buffer);
+        // gainSection->processBlock(buffer);
+        // dcBlockerSection->processBlock(buffer);
     }
 }
 

@@ -1,8 +1,7 @@
 #include "GainSection.h"
 
 GainSection::GainSection()
-{
-}
+= default;
 
 void GainSection::prepareToPlay(double sampleRate, int samplesPerBlock)
 {
@@ -22,6 +21,11 @@ void GainSection::processBlock(juce::AudioBuffer<float>& buffer)
 
     const float inputGainDb = inputGainParam ? inputGainParam->load() : 0.0f;
     const float outputGainDb = outputGainParam ? outputGainParam->load() : 0.0f;
+    const int numChannels = buffer.getNumChannels();
+    const int numSamples = buffer.getNumSamples();
+
+    if (numChannels <= 0 || numSamples <= 0)
+        return;
 
     smoothedInputGain.setTargetValue(juce::Decibels::decibelsToGain(inputGainDb));
     smoothedOutputGain.setTargetValue(juce::Decibels::decibelsToGain(outputGainDb));
@@ -41,21 +45,21 @@ void GainSection::processBlock(juce::AudioBuffer<float>& buffer)
     }
 }
 
-void GainSection::addParametersToLayout(std::vector<std::unique_ptr<juce::RangedAudioParameter>>& parameters)
+void GainSection::addParametersToLayout(juce::AudioProcessorValueTreeState::ParameterLayout& layout)
 {
-    parameters.push_back(std::make_unique<juce::AudioParameterBool>(
+    layout.add(std::make_unique<juce::AudioParameterBool>(
         juce::ParameterID(GAIN_ENABLED_ID, 1),
         "Gain Stage",
         true));
 
-    parameters.push_back(std::make_unique<juce::AudioParameterFloat>(
+    layout.add(std::make_unique<juce::AudioParameterFloat>(
         juce::ParameterID(INPUT_GAIN_ID, 1),
         "Input Gain",
         juce::NormalisableRange<float>(-24.0f, 24.0f, 0.1f),
         0.0f,
         juce::AudioParameterFloatAttributes().withLabel("dB")));
 
-    parameters.push_back(std::make_unique<juce::AudioParameterFloat>(
+    layout.add(std::make_unique<juce::AudioParameterFloat>(
         juce::ParameterID(OUTPUT_GAIN_ID, 1),
         "Output Gain",
         juce::NormalisableRange<float>(-36.0f, 12.0f, 0.1f),

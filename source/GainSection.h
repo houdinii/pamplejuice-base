@@ -10,11 +10,11 @@ public:
 
     void prepareToPlay(double sampleRate, int samplesPerBlock) override;
     void processBlock(juce::AudioBuffer<float>& buffer) override;
-    void addParametersToLayout(std::vector<std::unique_ptr<juce::RangedAudioParameter>>& parameters) override;
+    void addParametersToLayout(juce::AudioProcessorValueTreeState::ParameterLayout& layout) override;
     void setParameterPointers(juce::AudioProcessorValueTreeState& valueTreeState) override;
 
-    juce::String getSectionName() const override { return "Gain Stage"; }
-    juce::String getEnableParameterId() const override { return GAIN_ENABLED_ID; }
+    [[nodiscard]] juce::String getSectionName() const override { return "Gain Stage"; }
+    [[nodiscard]] juce::String getEnableParameterId() const override { return GAIN_ENABLED_ID; }
 
     // Parameter IDs
     static constexpr const char* INPUT_GAIN_ID = "inputGain";

@@ -10,11 +10,11 @@ public:
 
     void prepareToPlay(double sampleRate, int samplesPerBlock) override;
     void processBlock(juce::AudioBuffer<float>& buffer) override;
-    void addParametersToLayout(std::vector<std::unique_ptr<juce::RangedAudioParameter>>& parameters) override;
+    void addParametersToLayout(juce::AudioProcessorValueTreeState::ParameterLayout& layout) override;
     void setParameterPointers(juce::AudioProcessorValueTreeState& valueTreeState) override;
 
-    juce::String getSectionName() const override { return "DC Blocker"; }
-    juce::String getEnableParameterId() const override { return DC_BLOCKER_ENABLED_ID; }
+    [[nodiscard]] juce::String getSectionName() const override { return "DC Blocker"; }
+    [[nodiscard]] juce::String getEnableParameterId() const override { return DC_BLOCKER_ENABLED_ID; }
 
     // Parameter IDs
     static constexpr const char* DC_BLOCKER_R_ID = "dcBlockerR";

@@ -1,8 +1,7 @@
 #include "DCBlockerSection.h"
 
 DCBlockerSection::DCBlockerSection()
-{
-}
+= default;
 
 void DCBlockerSection::prepareToPlay(double sampleRate, int samplesPerBlock)
 {
@@ -22,8 +21,12 @@ void DCBlockerSection::processBlock(juce::AudioBuffer<float>& buffer)
     const int numChannels = buffer.getNumChannels();
     const int numSamples = buffer.getNumSamples();
 
+
+    if (numChannels <= 0 || numSamples <= 0)
+        return;
+
     // Resize state arrays if needed
-    if (x1.size() != numChannels)
+    if (static_cast<int> (x1.size()) != numChannels || static_cast<int> (y1.size()) != numChannels)
     {
         x1.resize(numChannels, 0.0f);
         y1.resize(numChannels, 0.0f);
@@ -40,6 +43,10 @@ void DCBlockerSection::processBlock(juce::AudioBuffer<float>& buffer)
             // y[n] = x[n] - x[n-1] + R * y[n-1]
             const float y_n = x_n - x1[channel] + R * y1[channel];
 
+            jassert(channel < buffer.getNumChannels());
+            jassert(x1.size() >= (size_t)channel);
+            jassert(y1.size() >= (size_t)channel);
+
             channelData[sample] = y_n;
 
             // Update state
@@ -49,14 +56,14 @@ void DCBlockerSection::processBlock(juce::AudioBuffer<float>& buffer)
     }
 }
 
-void DCBlockerSection::addParametersToLayout(std::vector<std::unique_ptr<juce::RangedAudioParameter>>& parameters)
+void DCBlockerSection::addParametersToLayout(juce::AudioProcessorValueTreeState::ParameterLayout& layout)
 {
-    parameters.push_back(std::make_unique<juce::AudioParameterBool>(
+    layout.add(std::make_unique<juce::AudioParameterBool>(
         juce::ParameterID(DC_BLOCKER_ENABLED_ID, 1),
         "DC Blocker",
         true));
 
-    parameters.push_back(std::make_unique<juce::AudioParameterFloat>(
+    layout.add(std::make_unique<juce::AudioParameterFloat>(
         juce::ParameterID(DC_BLOCKER_R_ID, 1),
         "DC Blocker R",
         juce::NormalisableRange<float>(0.990f, 0.999f, 0.001f),
