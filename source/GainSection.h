@@ -18,6 +18,7 @@ public:
 
     // Parameter IDs
     static constexpr const char* INPUT_GAIN_ID = "inputGain";
+    static constexpr const char* DC_OFFSET_ID = "dcOffset";
     static constexpr const char* OUTPUT_GAIN_ID = "outputGain";
     static constexpr const char* GAIN_ENABLED_ID = "gainEnabled";
 
@@ -26,10 +27,11 @@ private:
     std::atomic<float>* inputGainParam = nullptr;
     std::atomic<float>* outputGainParam = nullptr;
     std::atomic<float>* enabledParam = nullptr;
+    std::atomic<float>* dcOffsetParam = nullptr;
 
     // Smoothed parameters
     juce::SmoothedValue<float> smoothedInputGain;
     juce::SmoothedValue<float> smoothedOutputGain;
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(GainSection)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (GainSection)
 };
