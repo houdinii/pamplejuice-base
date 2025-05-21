@@ -1,6 +1,6 @@
 #pragma once
 
-#include "EffectSection.h"
+#include "../Common/EffectSection.h"
 #include <juce_dsp/juce_dsp.h>
 
 class StereoWidenerSection : public EffectSection

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "EffectSection.h"
+#include "../Common/EffectSection.h"
 
 class GainSection : public EffectSection
 {

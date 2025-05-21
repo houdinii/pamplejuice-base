@@ -1,6 +1,6 @@
 #pragma once
 
-#include "EffectSectionUI.h"
+#include "../Common/EffectSectionUI.h"
 #include "DCBlockerSection.h"
 
 class DCBlockerSectionUI : public EffectSectionUI

@@ -1,12 +1,12 @@
 #pragma once
 
+#include "DCBlocker/DCBlockerSectionUI.h"
+#include "GainSection/GainSectionUI.h"
+#include "LowPassFilter/LowPassFilterSectionUI.h"
+#include "Meter/MeterSectionUI.h"
 #include "PluginProcessor.h"
+#include "StereoWidener/StereoWidenerSectionUI.h"
 #include "melatonin_inspector/melatonin_inspector.h"
-#include "GainSectionUI.h"
-#include "DCBlockerSectionUI.h"
-#include "LowPassFilterSectionUI.h"
-#include "StereoWidenerSectionUI.h"
-#include "MeterSectionUI.h"
 
 class PluginEditor : public juce::AudioProcessorEditor
 {

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "EffectSectionUI.h"
+#include "../Common/EffectSectionUI.h"
 #include "LowPassFilterSection.h"
 
 class LowPassFilterSectionUI : public EffectSectionUI

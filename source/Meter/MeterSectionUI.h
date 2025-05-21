@@ -1,6 +1,6 @@
 #pragma once
 
-#include "EffectSectionUI.h"
+#include "../Common/EffectSectionUI.h"
 #include "MeterSection.h"
 
 class LevelMeterComponent : public juce::Component, private juce::Timer

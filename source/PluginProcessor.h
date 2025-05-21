@@ -1,10 +1,10 @@
 #pragma once
 
-#include "DCBlockerSection.h"
-#include "GainSection.h"
-#include "LowPassFilterSection.h"
-#include "StereoWidenerSection.h"
-#include "MeterSection.h"
+#include "DCBlocker/DCBlockerSection.h"
+#include "GainSection/GainSection.h"
+#include "LowPassFilter/LowPassFilterSection.h"
+#include "Meter/MeterSection.h"
+#include "StereoWidener/StereoWidenerSection.h"
 
 #include <juce_audio_processors/juce_audio_processors.h>
 
