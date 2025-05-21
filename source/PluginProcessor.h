@@ -1,5 +1,8 @@
 #pragma once
 
+#include "DCBlockerSection.h"
+#include "GainSection.h"
+
 #include <juce_audio_processors/juce_audio_processors.h>
 
 #if (MSVC)
@@ -47,15 +50,12 @@ public:
     static constexpr const char* GAIN_ENABLED_ID = "gainEnabled";
 
 private:
-    // Parameter layout creation
-    static juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
-
-    // Value tree state for parameter management
+    juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
     juce::AudioProcessorValueTreeState valueTreeState;
 
-    // Smoothed parameters to prevent clicking
-    juce::SmoothedValue<float> smoothedInputGain;
-    juce::SmoothedValue<float> smoothedOutputGain;
+    // Effect sections
+    std::unique_ptr<GainSection> gainSection;
+    std::unique_ptr<DCBlockerSection> dcBlockerSection;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PluginProcessor)
 };

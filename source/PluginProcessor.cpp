@@ -11,8 +11,13 @@ PluginProcessor::PluginProcessor()
                        .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
                      #endif
                        ),
-       valueTreeState(*this, nullptr, "PARAMETERS", createParameterLayout())
+       valueTreeState(*this, nullptr, "PARAMETERS", createParameterLayout()),
+       gainSection(std::make_unique<GainSection>()),
+       dcBlockerSection(std::make_unique<DCBlockerSection>())
 {
+    // Set parameter pointers for all sections
+    gainSection->setParameterPointers(valueTreeState);
+    dcBlockerSection->setParameterPointers(valueTreeState);
 }
 
 PluginProcessor::~PluginProcessor()
@@ -22,29 +27,12 @@ juce::AudioProcessorValueTreeState::ParameterLayout PluginProcessor::createParam
 {
     std::vector<std::unique_ptr<juce::RangedAudioParameter>> parameters;
 
-    // Add an on/off switch for the gain stage
-    parameters.push_back(std::make_unique<juce::AudioParameterBool>(
-        juce::ParameterID(GAIN_ENABLED_ID, 1),
-        "Gain Stage",
-        true));  // default to enabled
+    // Let each section add its parameters
+    gainSection = std::make_unique<GainSection>();
+    dcBlockerSection = std::make_unique<DCBlockerSection>();
 
-    // Input gain: -24dB to +24dB, default 0dB (increased range for more pronounced effect)
-    parameters.push_back(std::make_unique<juce::AudioParameterFloat>(
-        juce::ParameterID(INPUT_GAIN_ID, 1),
-        "Input Gain",
-        juce::NormalisableRange<float>(-24.0f, 24.0f, 0.1f),
-        0.0f,
-        juce::AudioParameterFloatAttributes().withLabel("dB")
-    ));
-
-    // Output gain: -36dB to +12dB, default 0dB (increased range)
-    parameters.push_back(std::make_unique<juce::AudioParameterFloat>(
-        juce::ParameterID(OUTPUT_GAIN_ID, 1),
-        "Output Gain",
-        juce::NormalisableRange<float>(-36.0f, 12.0f, 0.1f),
-        0.0f,
-        juce::AudioParameterFloatAttributes().withLabel("dB")
-    ));
+    gainSection->addParametersToLayout(parameters);
+    dcBlockerSection->addParametersToLayout(parameters);
 
     return { parameters.begin(), parameters.end() };
 }
@@ -116,16 +104,8 @@ void PluginProcessor::changeProgramName (int index, const juce::String& newName)
 //==============================================================================
 void PluginProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
-    // Initialize smoothed parameters
-    // 50 ms ramp time should eliminate clicking without being noticeable
-    smoothedInputGain.reset(sampleRate, 0.05);  // 50ms ramp
-    smoothedOutputGain.reset(sampleRate, 0.05); // 50ms ramp
-
-    // Set initial values
-    smoothedInputGain.setCurrentAndTargetValue(juce::Decibels::decibelsToGain(0.0f));
-    smoothedOutputGain.setCurrentAndTargetValue(juce::Decibels::decibelsToGain(0.0f));
-
-    juce::ignoreUnused(samplesPerBlock);
+    gainSection->prepareToPlay(sampleRate, samplesPerBlock);
+    dcBlockerSection->prepareToPlay(sampleRate, samplesPerBlock);
 }
 
 void PluginProcessor::releaseResources()
@@ -160,47 +140,12 @@ void PluginProcessor::processBlock (juce::AudioBuffer<float>& buffer,
     auto totalNumInputChannels  = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();
 
-    // Clear any extra output channels
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
 
-    // Get parameter values and convert to linear gain
-    const float inputGainDb = *valueTreeState.getRawParameterValue(INPUT_GAIN_ID);
-    const float outputGainDb = *valueTreeState.getRawParameterValue(OUTPUT_GAIN_ID);
-
-    // Check if the gain stage is enabled
-    bool gainEnabled = *valueTreeState.getRawParameterValue(GAIN_ENABLED_ID) > 0.5f;
-
-    // Set target values for smooth parameters
-    smoothedInputGain.setTargetValue(gainEnabled ?
-        juce::Decibels::decibelsToGain(inputGainDb) :
-        1.0f);  // 0dB when disabled
-
-    smoothedOutputGain.setTargetValue(gainEnabled ?
-        juce::Decibels::decibelsToGain(outputGainDb) :
-        1.0f);  // 0dB when disabled
-
-    // Process each channel
-    for (int channel = 0; channel < totalNumInputChannels; ++channel)
-    {
-        auto* channelData = buffer.getWritePointer(channel);
-
-        for (int sample = 0; sample < buffer.getNumSamples(); ++sample)
-        {
-            // Get smoothed gain values for this sample
-            const float currentInputGain = smoothedInputGain.getNextValue();
-            const float currentOutputGain = smoothedOutputGain.getNextValue();
-
-            // Apply input gain
-            channelData[sample] *= currentInputGain;
-
-            // Here's where you'd insert other processing later
-            // (e.g., compressor, EQ, distortion, etc.)
-
-            // Apply output gain/trim
-            channelData[sample] *= currentOutputGain;
-        }
-    }
+    // Process through each section in order
+    gainSection->processBlock(buffer);
+    dcBlockerSection->processBlock(buffer);
 }
 
 //==============================================================================
