@@ -23,6 +23,6 @@ void DCBlockerSectionUI::initialize()
 
 void DCBlockerSectionUI::layoutControls(juce::Rectangle<int> area)
 {
-    area.removeFromTop(20); // Space for label
-    rSlider.setBounds(area.withSizeKeepingCentre(100, 100));
+    area.removeFromTop(15); // Reduced from 20
+    rSlider.setBounds(area.withSizeKeepingCentre(80, juce::jmin(80, area.getHeight())));
 }

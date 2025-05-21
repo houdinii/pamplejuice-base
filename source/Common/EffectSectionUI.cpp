@@ -20,23 +20,23 @@ void EffectSectionUI::paint(juce::Graphics& g)
 
     // Draw section background
     g.setColour(juce::Colours::darkgrey.withAlpha(0.6f));
-    g.fillRoundedRectangle(bounds.toFloat(), 10.0f);
+    g.fillRoundedRectangle(bounds.toFloat(), 8.0f); // Slightly smaller radius
 
     // Draw section title
     g.setColour(juce::Colours::white);
-    g.setFont(16.0f);
-    auto titleArea = bounds.removeFromTop(30);
+    g.setFont(14.0f); // Smaller font for title
+    auto titleArea = bounds.removeFromTop(25); // Reduced from 30
     g.drawText(sectionName, titleArea, juce::Justification::centred, true);
 }
 
 void EffectSectionUI::resized()
 {
-    auto bounds = getLocalBounds().reduced(10);
-    bounds.removeFromTop(30); // Space for title
+    auto bounds = getLocalBounds().reduced(5); // Reduced from 10
+    bounds.removeFromTop(25); // Reduced from 30 for the title
 
     // Enable button at top
-    enableButton.setBounds(bounds.removeFromTop(30));
-    bounds.removeFromTop(5); // Small gap
+    enableButton.setBounds(bounds.removeFromTop(25).reduced(2)); // Reduced height and padding
+    bounds.removeFromTop(3); // Smaller gap
 
     // Let subclass handle the rest
     layoutControls(bounds);

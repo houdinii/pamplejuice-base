@@ -118,11 +118,11 @@ void MeterSectionUI::initialize()
 
 void MeterSectionUI::layoutControls(juce::Rectangle<int> area)
 {
-    constexpr int meterWidth = 30;
-    constexpr int meterSpacing = 5;
-    constexpr int labelHeight = 15;
+    const int meterWidth = 25; // Slightly narrower meters
+    const int meterSpacing = 5;
+    const int labelHeight = 12; // Smaller labels
 
-    area.removeFromTop(10); // Top spacing
+    area.removeFromTop(5); // Less top spacing
 
     // Calculate centers for meters
     auto centerX = area.getCentreX();

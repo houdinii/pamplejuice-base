@@ -34,6 +34,6 @@ void StereoWidenerSectionUI::initialize()
 
 void StereoWidenerSectionUI::layoutControls(juce::Rectangle<int> area)
 {
-    area.removeFromTop(20); // Space for label
-    widthSlider.setBounds(area.withSizeKeepingCentre(100, 100));
+    area.removeFromTop(15); // Space for label
+    widthSlider.setBounds(area.withSizeKeepingCentre(80, juce::jmin(80, area.getHeight())));
 }

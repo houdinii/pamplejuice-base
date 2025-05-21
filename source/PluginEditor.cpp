@@ -35,7 +35,10 @@ PluginEditor::PluginEditor (PluginProcessor& p)
     addAndMakeVisible(*stereoWidenerSectionUI);
     addAndMakeVisible(*meterSectionUI);
 
-    setSize(500, 900); // Taller to fit both sections
+    // Wider format: 3 columns, 2 rows
+    setSize(750, 500);
+    setResizable(true, true);
+    setResizeLimits(600, 400, 1200, 800);
 }
 
 PluginEditor::~PluginEditor() = default;
@@ -46,34 +49,52 @@ void PluginEditor::paint(juce::Graphics& g)
 
     g.setColour(juce::Colours::white);
     g.setFont(18.0f);
-    g.drawText("Bass Effect Chain", getLocalBounds().removeFromTop(40),
+    g.drawText("Bass Effect Chain", getLocalBounds().removeFromTop(30),
                juce::Justification::centred, true);
 }
 
 void PluginEditor::resized()
 {
     auto bounds = getLocalBounds();
-    bounds.removeFromTop(50); // Space for title
+
+    // Reserve space for title
+    bounds.removeFromTop(35);
 
     // Inspector button in the bottom corner
-    inspectButton.setBounds(bounds.removeFromBottom(30).removeFromRight(120).reduced(5));
+    inspectButton.setBounds(bounds.removeFromBottom(25).removeFromRight(100).reduced(2));
 
-    // Stack sections vertically
-    bounds.reduce(20, 10);
+    // Main content area with reduced padding
+    bounds.reduce(10, 5); // Much tighter padding
 
-    gainSectionUI->setBounds(bounds.removeFromTop(200));
-    bounds.removeFromTop(10); // Gap between sections
+    // Calculate dimensions for grid layout
+    const int numColumnsRow1 = 3;
+    const int numColumnsRow2 = 2;
+    const int rowHeight = bounds.getHeight() / 2;
+    const int colWidthRow1 = bounds.getWidth() / numColumnsRow1;
+    const int colWidthRow2 = bounds.getWidth() / numColumnsRow2;
+    const int sectionPadding = 5; // Small gaps between sections
 
-    // Increase the DCBlocker section height
-    dcBlockerSectionUI->setBounds(bounds.removeFromTop(200)); // Changed from 150 to 200
+    // First row: Gain, DC Blocker, Low Pass Filter (3 sections)
+    auto row1 = bounds.removeFromTop(rowHeight);
 
-    // Add other sections here
-    bounds.removeFromTop(10); // Gap between sections
-    lowPassFilterSectionUI->setBounds(bounds.removeFromTop(200));
+    auto gainBounds = row1.removeFromLeft(colWidthRow1).reduced(sectionPadding);
+    gainSectionUI->setBounds(gainBounds);
 
-    bounds.removeFromTop(10); // Gap between sections
-    stereoWidenerSectionUI->setBounds(bounds.removeFromTop(200));
+    auto dcBlockerBounds = row1.removeFromLeft(colWidthRow1).reduced(sectionPadding);
+    dcBlockerSectionUI->setBounds(dcBlockerBounds);
 
-    bounds.removeFromTop(10); // Gap between sections
-    meterSectionUI->setBounds(bounds.removeFromTop(200));
+    auto lowPassBounds = row1.reduced(sectionPadding); // Remaining space
+    lowPassFilterSectionUI->setBounds(lowPassBounds);
+
+    // Add some vertical spacing between rows
+    bounds.removeFromTop(10);
+
+    // Second row: Stereo Widener, Meter (2 sections)
+    auto row2 = bounds.removeFromTop(rowHeight);
+
+    auto stereoWidenerBounds = row2.removeFromLeft(colWidthRow2).reduced(sectionPadding);
+    stereoWidenerSectionUI->setBounds(stereoWidenerBounds);
+
+    auto meterBounds = row2.reduced(sectionPadding); // Remaining space
+    meterSectionUI->setBounds(meterBounds);
 }

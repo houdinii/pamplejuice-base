@@ -3,7 +3,6 @@
 GainSectionUI::GainSectionUI(juce::AudioProcessorValueTreeState& valueTreeState)
     : EffectSectionUI("Gain Stage", GainSection::GAIN_ENABLED_ID, valueTreeState)
 {
-    // No addControls call here!
 }
 
 void GainSectionUI::initialize()
@@ -39,15 +38,15 @@ void GainSectionUI::initialize()
 
 void GainSectionUI::layoutControls(juce::Rectangle<int> area)
 {
-    auto knobWidth = area.getWidth() / 2;
+    // Remove less space for labels
+    area.removeFromTop(15); // Reduced from 20
 
-    auto inputArea = area.removeFromLeft(knobWidth).reduced(10);
-    auto outputArea = area.reduced(10);
+    auto knobSize = juce::jmin(80, area.getWidth() / 2 - 10); // Smaller knobs
+    auto knobHeight = area.getHeight() - 20; // Leave some padding
 
-    // Leave space for labels
-    inputArea.removeFromTop(20);
-    outputArea.removeFromTop(20);
+    auto inputArea = area.removeFromLeft(area.getWidth() / 2);
+    auto outputArea = area;
 
-    inputGainSlider.setBounds(inputArea);
-    outputGainSlider.setBounds(outputArea);
+    inputGainSlider.setBounds(inputArea.withSizeKeepingCentre(knobSize, knobHeight));
+    outputGainSlider.setBounds(outputArea.withSizeKeepingCentre(knobSize, knobHeight));
 }
