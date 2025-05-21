@@ -1,6 +1,9 @@
 #pragma once
 
 #include "../Common/EffectSection.h"
+#include <vector>
+
+class WaveShaper;
 
 class SoftClipperSection : public EffectSection
 {
@@ -21,6 +24,13 @@ public:
     static constexpr const char* SOFTCLIP_TYPE_ID = "softClipType";
     static constexpr const char* SOFTCLIP_MIX_ID = "softClipMix";
     static constexpr const char* SOFTCLIP_ENABLED_ID = "softClipEnabled";
+    static constexpr const char* SOFTCLIP_INPUT_BOOST_ID = "softClipBoost";
+
+    // Get current input level for metering (0.0 to 1.0)
+    float getCurrentInputLevel() const { return inputLevel.load(); }
+
+    // Get transfer function points for visualization
+    std::vector<float> getTransferFunctionPoints(int numPoints) const;
 
     enum ClipType
     {
@@ -35,11 +45,20 @@ private:
     std::atomic<float>* typeParam = nullptr;
     std::atomic<float>* mixParam = nullptr;
     std::atomic<float>* enabledParam = nullptr;
+    std::atomic<float>* inputBoostParam = nullptr;
+
+    // For level metering
+    std::atomic<float> inputLevel { 0.0f };
+    double sampleRate = 44100.0;
+    float meterFallback = 0.0f;
 
     // Clipping functions
-    static inline float processTanh (float input);
-    static inline float processCubic (float input);
-    static inline float processArctan(float input);
+    float processTanh (float input) const;
+    float processCubic (float input) const;
+    float processArctan(float input) const;
+
+    // Apply the currently selected waveshaper
+    float applyWaveshaper(float input, int type) const;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(SoftClipperSection)
 };

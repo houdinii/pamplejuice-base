@@ -22,8 +22,10 @@ PluginEditor::PluginEditor (PluginProcessor& p)
     meterSectionUI = std::make_unique<MeterSectionUI>(processorRef.getValueTreeState(),
                                                      *dynamic_cast<MeterSection*>(processorRef.getMeterSection()));
     softClipperSectionUI = std::make_unique<SoftClipperSectionUI>(processorRef.getValueTreeState());
+    softClipperSectionUI->setSoftClipperSection(dynamic_cast<SoftClipperSection*>(processorRef.getSoftClipperSection()));
     compressorSectionUI = std::make_unique<CompressorSectionUI>(processorRef.getValueTreeState(),
                                                                  *dynamic_cast<CompressorSection*>(processorRef.getCompressorSection()));
+
 
     // Initialize after construction
     gainSectionUI->initialize();

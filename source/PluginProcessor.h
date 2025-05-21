@@ -38,6 +38,7 @@ public:
     double getTailLengthSeconds() const override;
     EffectSection* getMeterSection() const { return meterSection.get(); }
     EffectSection* getCompressorSection() const { return compressorSection.get(); }
+    EffectSection* getSoftClipperSection() const { return softClipperSection.get(); }
 
 
     int getNumPrograms() override;
