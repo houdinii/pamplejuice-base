@@ -1,9 +1,11 @@
 #pragma once
 
-#include "DCBlocker/DCBlockerSection.h"
-#include "GainSection/GainSection.h"
-#include "LowPassFilter/LowPassFilterSection.h"
 #include "Meter/MeterSection.h"
+#include "GainSection/GainSection.h"
+#include "DCBlocker/DCBlockerSection.h"
+#include "SoftClipper/SoftClipperSection.h"
+#include "Compressor/CompressorSection.h"
+#include "LowPassFilter/LowPassFilterSection.h"
 #include "StereoWidener/StereoWidenerSection.h"
 
 #include <juce_audio_processors/juce_audio_processors.h>
@@ -35,6 +37,8 @@ public:
     bool isMidiEffect() const override;
     double getTailLengthSeconds() const override;
     EffectSection* getMeterSection() const { return meterSection.get(); }
+    EffectSection* getCompressorSection() const { return compressorSection.get(); }
+
 
     int getNumPrograms() override;
     int getCurrentProgram() override;
@@ -54,7 +58,7 @@ public:
     static constexpr const char* GAIN_ENABLED_ID = "gainEnabled";
 
 private:
-    juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
+    static juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
     juce::AudioProcessorValueTreeState valueTreeState;
 
     // Effect sections
@@ -63,6 +67,8 @@ private:
     std::unique_ptr<LowPassFilterSection> lowPassFilterSection;
     std::unique_ptr<StereoWidenerSection> stereoWidenerSection;
     std::unique_ptr<MeterSection> meterSection;
+    std::unique_ptr<SoftClipperSection> softClipperSection;
+    std::unique_ptr<CompressorSection> compressorSection;
 
     // Flag to track if we've initialized sections
     bool sectionsInitialized = false;

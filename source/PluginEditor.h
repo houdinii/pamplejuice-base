@@ -6,6 +6,8 @@
 #include "Meter/MeterSectionUI.h"
 #include "PluginProcessor.h"
 #include "StereoWidener/StereoWidenerSectionUI.h"
+#include "Compressor/CompressorSectionUI.h"
+#include "SoftClipper/SoftClipperSectionUI.h"
 #include "melatonin_inspector/melatonin_inspector.h"
 
 class PluginEditor : public juce::AudioProcessorEditor
@@ -30,6 +32,8 @@ private:
     std::unique_ptr<LowPassFilterSectionUI> lowPassFilterSectionUI;
     std::unique_ptr<StereoWidenerSectionUI> stereoWidenerSectionUI;
     std::unique_ptr<MeterSectionUI> meterSectionUI;
+    std::unique_ptr<CompressorSectionUI> compressorSectionUI;
+    std::unique_ptr<SoftClipperSectionUI> softClipperSectionUI;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PluginEditor)
 };

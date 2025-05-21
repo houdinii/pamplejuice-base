@@ -21,6 +21,9 @@ PluginEditor::PluginEditor (PluginProcessor& p)
     stereoWidenerSectionUI = std::make_unique<StereoWidenerSectionUI>(processorRef.getValueTreeState());
     meterSectionUI = std::make_unique<MeterSectionUI>(processorRef.getValueTreeState(),
                                                      *dynamic_cast<MeterSection*>(processorRef.getMeterSection()));
+    softClipperSectionUI = std::make_unique<SoftClipperSectionUI>(processorRef.getValueTreeState());
+    compressorSectionUI = std::make_unique<CompressorSectionUI>(processorRef.getValueTreeState(),
+                                                                 *dynamic_cast<CompressorSection*>(processorRef.getCompressorSection()));
 
     // Initialize after construction
     gainSectionUI->initialize();
@@ -28,12 +31,16 @@ PluginEditor::PluginEditor (PluginProcessor& p)
     lowPassFilterSectionUI->initialize();
     stereoWidenerSectionUI->initialize();
     meterSectionUI->initialize();
+    softClipperSectionUI->initialize();
+    compressorSectionUI->initialize();
 
     addAndMakeVisible(*gainSectionUI);
     addAndMakeVisible(*dcBlockerSectionUI);
     addAndMakeVisible(*lowPassFilterSectionUI);
     addAndMakeVisible(*stereoWidenerSectionUI);
     addAndMakeVisible(*meterSectionUI);
+    addAndMakeVisible(*softClipperSectionUI);
+    addAndMakeVisible(*compressorSectionUI);
 
     // Wider format: 3 columns, 2 rows
     setSize(750, 500);
@@ -67,12 +74,12 @@ void PluginEditor::resized()
     bounds.reduce(10, 5); // Much tighter padding
 
     // Calculate dimensions for grid layout
-    const int numColumnsRow1 = 3;
-    const int numColumnsRow2 = 2;
+    constexpr int numColumnsRow1 = 3;
+    constexpr int numColumnsRow2 = 4;
     const int rowHeight = bounds.getHeight() / 2;
     const int colWidthRow1 = bounds.getWidth() / numColumnsRow1;
     const int colWidthRow2 = bounds.getWidth() / numColumnsRow2;
-    const int sectionPadding = 5; // Small gaps between sections
+    constexpr int sectionPadding = 5; // Small gaps between sections
 
     // First row: Gain, DC Blocker, Low Pass Filter (3 sections)
     auto row1 = bounds.removeFromTop(rowHeight);
@@ -95,6 +102,12 @@ void PluginEditor::resized()
     auto stereoWidenerBounds = row2.removeFromLeft(colWidthRow2).reduced(sectionPadding);
     stereoWidenerSectionUI->setBounds(stereoWidenerBounds);
 
-    auto meterBounds = row2.reduced(sectionPadding); // Remaining space
+    auto meterBounds = row2.removeFromLeft(colWidthRow2).reduced(sectionPadding);
     meterSectionUI->setBounds(meterBounds);
+
+    auto compressionBounds = row2.removeFromLeft(colWidthRow2).reduced(sectionPadding);
+    compressorSectionUI->setBounds(compressionBounds);
+
+    auto softClipperBounds = row2.reduced(sectionPadding);
+    softClipperSectionUI->setBounds(softClipperBounds);
 }

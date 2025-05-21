@@ -19,6 +19,8 @@ PluginProcessor::PluginProcessor()
     lowPassFilterSection = std::make_unique<LowPassFilterSection>();
     stereoWidenerSection = std::make_unique<StereoWidenerSection>();
     meterSection = std::make_unique<MeterSection>();
+    softClipperSection = std::make_unique<SoftClipperSection>();
+    compressorSection = std::make_unique<CompressorSection>();
 
     // Set parameter pointers
     gainSection->setParameterPointers(valueTreeState);
@@ -26,6 +28,8 @@ PluginProcessor::PluginProcessor()
     lowPassFilterSection->setParameterPointers(valueTreeState);
     stereoWidenerSection->setParameterPointers(valueTreeState);
     meterSection->setParameterPointers(valueTreeState);
+    softClipperSection->setParameterPointers(valueTreeState);
+    compressorSection->setParameterPointers(valueTreeState);
 
     sectionsInitialized = true;
 }
@@ -42,13 +46,16 @@ juce::AudioProcessorValueTreeState::ParameterLayout PluginProcessor::createParam
     LowPassFilterSection tempLowPassFilterSection;
     StereoWidenerSection tempStereoWidenerSection;
     MeterSection tempMeterSection;
+    SoftClipperSection tempSoftClipperSection;
+    CompressorSection tempCompressorSection;
 
     tempGainSection.addParametersToLayout(layout);
     tempDcBlockerSection.addParametersToLayout(layout);
     tempLowPassFilterSection.addParametersToLayout(layout);
     tempStereoWidenerSection.addParametersToLayout(layout);
     tempMeterSection.addParametersToLayout(layout);
-
+    tempSoftClipperSection.addParametersToLayout(layout);
+    tempCompressorSection.addParametersToLayout(layout);
     return layout;
 }
 
@@ -126,6 +133,8 @@ void PluginProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
         lowPassFilterSection->prepareToPlay(sampleRate, samplesPerBlock);
         stereoWidenerSection->prepareToPlay(sampleRate, samplesPerBlock);
         meterSection->prepareToPlay(sampleRate, samplesPerBlock);
+        softClipperSection->prepareToPlay(sampleRate, samplesPerBlock);
+        compressorSection->prepareToPlay(sampleRate, samplesPerBlock);
     }
 }
 
@@ -169,8 +178,11 @@ void PluginProcessor::processBlock (juce::AudioBuffer<float>& buffer,
         gainSection->processBlock(buffer);
         dcBlockerSection->processBlock(buffer);
         lowPassFilterSection->processBlock(buffer);
+        softClipperSection->processBlock(buffer);
+        compressorSection->processBlock(buffer);
         stereoWidenerSection->processBlock(buffer);
         meterSection->processBlock(buffer);
+
     }
 }
 
