@@ -4,6 +4,9 @@
 #include "melatonin_inspector/melatonin_inspector.h"
 #include "GainSectionUI.h"
 #include "DCBlockerSectionUI.h"
+#include "LowPassFilterSectionUI.h"
+#include "StereoWidenerSectionUI.h"
+#include "MeterSectionUI.h"
 
 class PluginEditor : public juce::AudioProcessorEditor
 {
@@ -24,6 +27,9 @@ private:
     // Effect section UIs
     std::unique_ptr<GainSectionUI> gainSectionUI;
     std::unique_ptr<DCBlockerSectionUI> dcBlockerSectionUI;
+    std::unique_ptr<LowPassFilterSectionUI> lowPassFilterSectionUI;
+    std::unique_ptr<StereoWidenerSectionUI> stereoWidenerSectionUI;
+    std::unique_ptr<MeterSectionUI> meterSectionUI;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PluginEditor)
 };

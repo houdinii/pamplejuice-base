@@ -17,15 +17,25 @@ PluginEditor::PluginEditor (PluginProcessor& p)
     // Create section UIs
     gainSectionUI = std::make_unique<GainSectionUI>(processorRef.getValueTreeState());
     dcBlockerSectionUI = std::make_unique<DCBlockerSectionUI>(processorRef.getValueTreeState());
+    lowPassFilterSectionUI = std::make_unique<LowPassFilterSectionUI>(processorRef.getValueTreeState());
+    stereoWidenerSectionUI = std::make_unique<StereoWidenerSectionUI>(processorRef.getValueTreeState());
+    meterSectionUI = std::make_unique<MeterSectionUI>(processorRef.getValueTreeState(),
+                                                     *dynamic_cast<MeterSection*>(processorRef.getMeterSection()));
 
     // Initialize after construction
     gainSectionUI->initialize();
     dcBlockerSectionUI->initialize();
+    lowPassFilterSectionUI->initialize();
+    stereoWidenerSectionUI->initialize();
+    meterSectionUI->initialize();
 
     addAndMakeVisible(*gainSectionUI);
     addAndMakeVisible(*dcBlockerSectionUI);
+    addAndMakeVisible(*lowPassFilterSectionUI);
+    addAndMakeVisible(*stereoWidenerSectionUI);
+    addAndMakeVisible(*meterSectionUI);
 
-    setSize(500, 800); // Taller to fit both sections
+    setSize(500, 900); // Taller to fit both sections
 }
 
 PluginEditor::~PluginEditor() = default;
@@ -53,5 +63,17 @@ void PluginEditor::resized()
 
     gainSectionUI->setBounds(bounds.removeFromTop(200));
     bounds.removeFromTop(10); // Gap between sections
-    dcBlockerSectionUI->setBounds(bounds.removeFromTop(150));
+
+    // Increase the DCBlocker section height
+    dcBlockerSectionUI->setBounds(bounds.removeFromTop(200)); // Changed from 150 to 200
+
+    // Add other sections here
+    bounds.removeFromTop(10); // Gap between sections
+    lowPassFilterSectionUI->setBounds(bounds.removeFromTop(200));
+
+    bounds.removeFromTop(10); // Gap between sections
+    stereoWidenerSectionUI->setBounds(bounds.removeFromTop(200));
+
+    bounds.removeFromTop(10); // Gap between sections
+    meterSectionUI->setBounds(bounds.removeFromTop(200));
 }

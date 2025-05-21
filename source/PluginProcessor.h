@@ -2,6 +2,9 @@
 
 #include "DCBlockerSection.h"
 #include "GainSection.h"
+#include "LowPassFilterSection.h"
+#include "StereoWidenerSection.h"
+#include "MeterSection.h"
 
 #include <juce_audio_processors/juce_audio_processors.h>
 
@@ -31,6 +34,7 @@ public:
     bool producesMidi() const override;
     bool isMidiEffect() const override;
     double getTailLengthSeconds() const override;
+    EffectSection* getMeterSection() const { return meterSection.get(); }
 
     int getNumPrograms() override;
     int getCurrentProgram() override;
@@ -56,6 +60,9 @@ private:
     // Effect sections
     std::unique_ptr<GainSection> gainSection;
     std::unique_ptr<DCBlockerSection> dcBlockerSection;
+    std::unique_ptr<LowPassFilterSection> lowPassFilterSection;
+    std::unique_ptr<StereoWidenerSection> stereoWidenerSection;
+    std::unique_ptr<MeterSection> meterSection;
 
     // Flag to track if we've initialized sections
     bool sectionsInitialized = false;

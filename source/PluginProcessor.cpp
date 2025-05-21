@@ -16,10 +16,16 @@ PluginProcessor::PluginProcessor()
     // Create sections AFTER the valueTreeState is constructed
     gainSection = std::make_unique<GainSection>();
     dcBlockerSection = std::make_unique<DCBlockerSection>();
+    lowPassFilterSection = std::make_unique<LowPassFilterSection>();
+    stereoWidenerSection = std::make_unique<StereoWidenerSection>();
+    meterSection = std::make_unique<MeterSection>();
 
     // Set parameter pointers
     gainSection->setParameterPointers(valueTreeState);
     dcBlockerSection->setParameterPointers(valueTreeState);
+    lowPassFilterSection->setParameterPointers(valueTreeState);
+    stereoWidenerSection->setParameterPointers(valueTreeState);
+    meterSection->setParameterPointers(valueTreeState);
 
     sectionsInitialized = true;
 }
@@ -33,9 +39,15 @@ juce::AudioProcessorValueTreeState::ParameterLayout PluginProcessor::createParam
 
     GainSection tempGainSection;
     DCBlockerSection tempDcBlockerSection;
+    LowPassFilterSection tempLowPassFilterSection;
+    StereoWidenerSection tempStereoWidenerSection;
+    MeterSection tempMeterSection;
 
     tempGainSection.addParametersToLayout(layout);
     tempDcBlockerSection.addParametersToLayout(layout);
+    tempLowPassFilterSection.addParametersToLayout(layout);
+    tempStereoWidenerSection.addParametersToLayout(layout);
+    tempMeterSection.addParametersToLayout(layout);
 
     return layout;
 }
@@ -111,6 +123,9 @@ void PluginProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
     if (sectionsInitialized) {
         gainSection->prepareToPlay(sampleRate, samplesPerBlock);
         dcBlockerSection->prepareToPlay(sampleRate, samplesPerBlock);
+        lowPassFilterSection->prepareToPlay(sampleRate, samplesPerBlock);
+        stereoWidenerSection->prepareToPlay(sampleRate, samplesPerBlock);
+        meterSection->prepareToPlay(sampleRate, samplesPerBlock);
     }
 }
 
@@ -153,6 +168,9 @@ void PluginProcessor::processBlock (juce::AudioBuffer<float>& buffer,
     if (sectionsInitialized) {
         gainSection->processBlock(buffer);
         dcBlockerSection->processBlock(buffer);
+        lowPassFilterSection->processBlock(buffer);
+        stereoWidenerSection->processBlock(buffer);
+        meterSection->processBlock(buffer);
     }
 }
 
