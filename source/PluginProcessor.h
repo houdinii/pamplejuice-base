@@ -3,10 +3,10 @@
 #include <juce_audio_processors/juce_audio_processors.h>
 
 #if (MSVC)
-#include "ipps.h"
+    #include "ipps.h"
 #endif
 
-class PluginProcessor : public juce::AudioProcessor
+class PluginProcessor final : public juce::AudioProcessor
 {
 public:
     PluginProcessor();
@@ -38,6 +38,24 @@ public:
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
 
+    // Add this for parameter access
+    juce::AudioProcessorValueTreeState& getValueTreeState() { return valueTreeState; }
+
+    // Parameter IDs - making these public so the editor can access them
+    static constexpr const char* INPUT_GAIN_ID = "inputGain";
+    static constexpr const char* OUTPUT_GAIN_ID = "outputGain";
+    static constexpr const char* GAIN_ENABLED_ID = "gainEnabled";
+
 private:
+    // Parameter layout creation
+    static juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
+
+    // Value tree state for parameter management
+    juce::AudioProcessorValueTreeState valueTreeState;
+
+    // Smoothed parameters to prevent clicking
+    juce::SmoothedValue<float> smoothedInputGain;
+    juce::SmoothedValue<float> smoothedOutputGain;
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PluginProcessor)
 };
