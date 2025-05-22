@@ -1,0 +1,14 @@
+{
+  "id": "houdinii_gui",
+  "name": "Houdinii GUI",
+  "version": "1.0.0",
+  "description": "GUI classes and utilities for Houdinii's audio plugins",
+  "dependencies": [
+    "juce_audio_basics",
+    "juce_audio_processors",
+    "juce_dsp"
+  ],
+  "website": "https://yourwebsite.com",
+  "license": "MIT",
+  "minimumCppStandard": "17"
+}

@@ -1,5 +1,11 @@
 #include "PluginEditor.h"
 
+#include "houdinii_gui/components/DCBlockerSectionUI.h"
+#include "houdinii_gui/components/LowPassFilterSectionUI.h"
+#include "houdinii_gui/components/StereoWidenerSectionUI.h"
+
+using namespace houdinii;
+
 PluginEditor::PluginEditor (PluginProcessor& p)
     : AudioProcessorEditor (&p), processorRef (p)
 {

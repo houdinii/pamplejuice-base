@@ -1,13 +1,13 @@
 #pragma once
 
-#include "DCBlocker/DCBlockerSectionUI.h"
-#include "GainSection/GainSectionUI.h"
+#include "../modules/houdinii_effects/filter/DCBlockerSectionUI.h"
+#include "../modules/houdinii_effects/modulation/StereoWidenerSectionUI.h"
+#include "../modules/houdinii_gui/components/CompressorSectionUI.h"
+#include "../modules/houdinii_gui/components/GainSectionUI.h"
+#include "../modules/houdinii_gui/components/MeterSectionUI.h"
+#include "../modules/houdinii_gui/components/SoftClipperSectionUI.h"
 #include "LowPassFilter/LowPassFilterSectionUI.h"
-#include "Meter/MeterSectionUI.h"
 #include "PluginProcessor.h"
-#include "StereoWidener/StereoWidenerSectionUI.h"
-#include "Compressor/CompressorSectionUI.h"
-#include "SoftClipper/SoftClipperSectionUI.h"
 #include "melatonin_inspector/melatonin_inspector.h"
 
 class PluginEditor : public juce::AudioProcessorEditor

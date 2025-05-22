@@ -1,0 +1,39 @@
+juce_add_module(houdinii_gui
+        ALIAS_NAMESPACE houdinii
+        SOURCES
+        houdinii_gui.cpp
+        houdinii_gui.h
+        components/EffectSectionUI.cpp
+        components/EffectSectionUI.h
+        components/GainSectionUI.cpp
+        components/GainSectionUI.h
+        components/DCBlockerSectionUI.cpp
+        components/DCBlockerSectionUI.h
+        components/LowPassFilterSectionUI.cpp
+        components/LowPassFilterSectionUI.h
+        components/CompressorSectionUI.cpp
+        components/CompressorSectionUI.h
+        components/SoftClipperSectionUI.cpp
+        components/SoftClipperSectionUI.h
+        components/StereoWidenerSectionUI.cpp
+        components/StereoWidenerSectionUI.h
+        components/MeterSectionUI.cpp
+        components/MeterSectionUI.h
+        visualizers/LevelMeterComponent.cpp
+        visualizers/LevelMeterComponent.h
+        visualizers/WaveShapeVisualizerComponent.cpp
+        visualizers/WaveShapeVisualizerComponent.h
+)
+
+target_include_directories(houdinii_gui
+        INTERFACE
+        ${CMAKE_CURRENT_SOURCE_DIR}/../
+)
+
+target_link_libraries(houdinii_gui
+        PUBLIC
+        houdinii_core
+        houdinii_effects
+        juce::juce_gui_basics
+        juce::juce_audio_processors
+)
