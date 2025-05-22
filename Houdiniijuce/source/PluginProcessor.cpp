@@ -1,5 +1,5 @@
-#include "PluginProcessor.h"
-#include "PluginEditor.h"
+#include "../include/PluginProcessor.h"
+#include "../include/PluginEditor.h"
 
 using namespace houdinii;
 
@@ -65,7 +65,7 @@ juce::AudioProcessorValueTreeState::ParameterLayout PluginProcessor::createParam
 //==============================================================================
 const juce::String PluginProcessor::getName() const
 {
-    return JucePlugin_Name;
+    return "JucePlugin_Name";
 }
 
 bool PluginProcessor::acceptsMidi() const

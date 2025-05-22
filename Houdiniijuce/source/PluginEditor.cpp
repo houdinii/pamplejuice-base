@@ -1,4 +1,4 @@
-#include "PluginEditor.h"
+#include "../include/PluginEditor.h"
 
 #include "houdinii_gui/components/CompressorSectionUI.h"
 #include "houdinii_gui/components/DCBlockerSectionUI.h"
