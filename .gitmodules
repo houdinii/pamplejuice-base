@@ -1,0 +1,9 @@
+[submodule "modules/houdinii_core"]
+	path = modules/houdinii_core
+	url = git@github.com:houdinii/houdinii_core.git
+[submodule "modules/houdinii_effects"]
+	path = modules/houdinii_effects
+	url = git@github.com:houdinii/houdinii_effects.git
+[submodule "modules/houdinii_gui"]
+	path = modules/houdinii_gui
+	url = git@github.com:houdinii/houdinii_gui.git
