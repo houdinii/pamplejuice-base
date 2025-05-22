@@ -1,5 +1,5 @@
 #include "SoftClipperSectionUI.h"
-#include "WaveShapeVisualizerComponent.h"
+#include "houdinii_gui/visualizers/WaveShapeVisualizerComponent.h"
 
 namespace houdinii
 {
@@ -95,17 +95,17 @@ namespace houdinii
         // Create wave shape visualizer if we have a reference to the processor
         if (softClipperSection && !waveShaper)
         {
-            waveShaper = std::make_unique<WaveShapeVisualizerComponent> (*softClipperSection);
-            addAndMakeVisible (*waveShaper);
+            waveShaper = std::make_unique<houdinii::WaveShapeVisualizerComponent> (*softClipperSection);  // Add houdinii:: namespace
+            addAndMakeVisible (*waveShaper);  // Dereference the unique_ptr
         }
 
         // Split into horizontal regions
-        auto upperArea = area.removeFromTop (area.getHeight() * 0.6f); // NOLINT(*-narrowing-conversions)
+        auto upperArea = area.removeFromTop (area.getHeight() * 0.6f);
 
         // Place waveshaper display in the upper area
         if (waveShaper)
         {
-            waveShaper->setBounds (upperArea.reduced (5));
+            waveShaper->setBounds (upperArea.reduced (5));  // Use -> operator for unique_ptr
         }
 
         // Calculate control placement in the lower area

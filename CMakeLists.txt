@@ -60,12 +60,9 @@ add_subdirectory(modules/clap-juce-extensions EXCLUDE_FROM_ALL)
 
 # This adds the melatonin inspector module
 add_subdirectory(modules/melatonin_inspector)
-
-# Add your custom modules
 add_subdirectory(modules/houdinii_core)
 add_subdirectory(modules/houdinii_effects)
 add_subdirectory(modules/houdinii_gui)
-
 
 # See `docs/CMake API.md` in the JUCE repo for all config options
 juce_add_plugin("${PROJECT_NAME}"
@@ -98,8 +95,8 @@ juce_add_plugin("${PROJECT_NAME}"
 
 # This lets us use our code in both the JUCE targets and our Test target
 # Without running into ODR violations
-add_library(SharedCode INTERFACE
-        source/SoftClipper/WaveShapeVisualizerComponent.h)
+
+add_library(SharedCode INTERFACE)
 
 clap_juce_extensions_plugin(TARGET "${PROJECT_NAME}"
         CLAP_ID "${BUNDLE_ID}" e

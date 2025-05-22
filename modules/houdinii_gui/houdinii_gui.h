@@ -53,5 +53,4 @@ namespace houdinii {
 #include "components/SoftClipperSectionUI.h"
 #include "components/StereoWidenerSectionUI.h"
 #include "components/MeterSectionUI.h"
-#include "visualizers/LevelMeterComponent.h"
 #include "visualizers/WaveShapeVisualizerComponent.h"

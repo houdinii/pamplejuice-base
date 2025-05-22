@@ -1,7 +1,11 @@
 #include "PluginEditor.h"
 
+#include "houdinii_gui/components/CompressorSectionUI.h"
 #include "houdinii_gui/components/DCBlockerSectionUI.h"
+#include "houdinii_gui/components/GainSectionUI.h"
 #include "houdinii_gui/components/LowPassFilterSectionUI.h"
+#include "houdinii_gui/components/MeterSectionUI.h"
+#include "houdinii_gui/components/SoftClipperSectionUI.h"
 #include "houdinii_gui/components/StereoWidenerSectionUI.h"
 
 using namespace houdinii;

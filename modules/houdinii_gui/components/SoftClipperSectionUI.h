@@ -3,9 +3,8 @@
 #include "../../houdinii_effects/distortion/SoftClipperSection.h"
 #include "EffectSectionUI.h"
 #include "MeterSectionUI.h"
+#include "../visualizers/WaveShapeVisualizerComponent.h"
 
-// Forward declaration
-class WaveShapeVisualizerComponent;
 
 namespace houdinii
 {
