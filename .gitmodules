@@ -1,3 +1,19 @@
+[submodule "JUCE"]
+	path = JUCE
+	url = https://github.com/juce-framework/JUCE/
+	branch = develop
+[submodule "modules/melatonin_inspector"]
+	path = modules/melatonin_inspector
+	url = https://github.com/sudara/melatonin_inspector.git
+	branch = main
+[submodule "cmake"]
+	path = cmake
+	url = https://github.com/sudara/cmake-includes.git
+	branch = main
+[submodule "modules/clap-juce-extensions"]
+	path = modules/clap-juce-extensions
+	url = https://github.com/free-audio/clap-juce-extensions.git
+	branch = main
 [submodule "modules/houdinii_core"]
 	path = modules/houdinii_core
 	url = git@github.com:houdinii/houdinii_core.git
@@ -7,3 +23,4 @@
 [submodule "modules/houdinii_gui"]
 	path = modules/houdinii_gui
 	url = git@github.com:houdinii/houdinii_gui.git
+
